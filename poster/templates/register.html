@@ -12,28 +12,28 @@
                     {% csrf_token %}
                     <div class="mb-3">
                         <label class="form-label">Имя пользователя</label>
-                        {{ form.username }}
+                        <input type="text" name="username" class="form-control">
                         {% if form.username.errors %}
                             <div class="text-danger">{{ form.username.errors }}</div>
                         {% endif %}
                     </div>
                     <div class="mb-3">
                         <label class="form-label bg">Email</label>
-                        {{ form.email }}
+                        <input type="text" name="email" class="form-control">
                         {% if form.email.errors %}
                             <div class="text-danger">{{ form.email.errors }}</div>
                         {% endif %}
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Пароль</label>
-                        {{ form.password1 }}
+                        <input type="password" name="password1" class="form-control">
                         {% if form.password1.errors %}
                             <div class="text-danger">{{ form.password1.errors }}</div>
                         {% endif %}
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Подтверждение пароля</label>
-                        {{ form.password2 }}
+                        <input type="password" name="password2" class="form-control">
                         {% if form.password2.errors %}
                             <div class="text-danger">{{ form.password2.errors }}</div>
                         {% endif %}
