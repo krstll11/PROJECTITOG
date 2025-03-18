@@ -3,6 +3,7 @@ from .models import Post
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from .forms import RegisterForm, PostForm, CommentForm
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def post_list(request):
     posts = Post.objects.all().prefetch_related('comment_set')
@@ -52,3 +53,29 @@ def create_post(request):
     else:
         form = PostForm()
     return render(request, 'create_post.html', {'form': form})
+def post_list(request):
+    all_posts = Post.objects.all().order_by('-id')  
+    paginator = Paginator(all_posts, 5)  
+    
+    page = request.GET.get('page')
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.post_id = request.POST.get('post_id')
+            comment.save()
+            return redirect(f"{request.path}?page={posts.number}")
+    else:
+        form = CommentForm()
+    
+    return render(request, 'posts.html', {
+        'posts': posts,
+        'form': form,
+    })
